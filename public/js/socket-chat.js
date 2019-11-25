@@ -4,13 +4,14 @@ var socket = io();
 // Busco parametros en la URL
 var params = new URLSearchParams(window.location.search);
 
-if (!params.has('nombre')) {
+if (!params.has('nombre') || !params.has('sala')) {
     window.location = 'index.html';
-    throw new Error('El nombre es necesario');
+    throw new Error('El nombre y sala son necesarios');
 }
 
 var usuario = {
-    nombre: params.get('nombre')
+    nombre: params.get('nombre'),
+    sala: params.get('sala')
 };
 
 // Escuchar
@@ -32,12 +33,12 @@ socket.on('disconnect', function() {
 
 
 // Enviar información
-socket.emit('enviarMensaje', {
-    usuario: 'Juani',
-    mensaje: 'Hola Mundo'
-}, function(resp) {
-    console.log('respuesta server: ', resp);
-});
+// socket.emit('crearMensaje', {
+//     usuario: 'Juani',
+//     mensaje: 'Hola Mundo'
+// }, function(resp) {
+//     console.log('respuesta server: ', resp);
+// });
 
 // Escuchar información
 socket.on('crearMensaje', function(mensaje) {
@@ -53,5 +54,11 @@ socket.on('crearMensaje', function(mensaje) {
 socket.on('listaPersona', function(mensaje) {
 
     console.log('Servidor: ', mensaje);
+
+});
+
+// Mensajes Privados
+socket.on('mensajePrivado', function(mensaje) {
+    console.log('Mensaje Privado: ', mensaje);
 
 });
